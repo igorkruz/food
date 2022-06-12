@@ -1,49 +1,56 @@
-function modal() {
-    // modal
+function openModal(modalSelector, modalTimerId) {
+    modal = document.querySelector(modalSelector);
 
-    const modalTrigger = document.querySelectorAll('[data-modal]'),
-        modal = document.querySelector('.modal');
+    modal.classList.add('show');
+    modal.classList.remove('hide');
 
-
-    function openModal() {
-        modal.classList.add('show');
-        modal.classList.remove('hide');
-        document.body.style.overflow = 'hidden'; /* забороняємо прокрутку привіткритому модальному вікні */
+    document.body.style.overflow = 'hidden'; /* забороняємо прокрутку привіткритому модальному вікні */
+    console.log(modalTimerId);
+    if (modalTimerId) {
         clearInterval(modalTimerId); /* якщо відкриваємо модальне вікно через кнопку то авто-показ не буде */
     }
+}
+
+function closeModal(modalSelector) {
+    modal = document.querySelector(modalSelector);
+
+    modal.classList.add('hide');
+    modal.classList.remove('show');
+    document.body.style.overflow = ''; /* дщзволяємо прокрутку модального вікна після того як його закриємо */
+
+}
+
+
+
+function modal(triggerSelector, modalSelector, modalTimerId) {
+    // modal
+
+    const modalTrigger = document.querySelectorAll(triggerSelector),
+        modal = document.querySelector(modalSelector);
+
 
     modalTrigger.forEach(btn => {
-        btn.addEventListener('click', openModal);
+        btn.addEventListener('click', () => openModal(modalSelector, modalTimerId));
 
     });
-
-    function closeModal() {
-        modal.classList.add('hide');
-        modal.classList.remove('show');
-        document.body.style.overflow = ''; /* дщзволяємо прокрутку модального вікна після того як його закриємо */
-
-    }
-
 
     // !дозволяє закр сод-вікно при натиску за межами мод-вікна
     modal.addEventListener('click', (event) => {
         if (event.target === modal || event.target.getAttribute('data-close') == "") {
-            closeModal();
+            closeModal(modalSelector);
         }
     });
 
     // !закр мод-вікн за допомогою escape
     document.addEventListener('keydown', (event) => {
         if (event.code === 'Escape' && modal.classList.contains('show')) {
-            closeModal();
+            closeModal(modalSelector);
         }
     });
     // !відкр модал через певний час
-    const modalTimerId = setTimeout(openModal, 300000);
-    // !відкр модал коли пролистали сторінку до кінця
     function showModalByScroll() {
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
-            openModal();
+            openModal(modalSelector, modalTimerId);
             window.removeEventListener('scroll', showModalByScroll);
         }
 
@@ -55,3 +62,9 @@ function modal() {
 }
 
 export default modal;
+export {
+    closeModal
+};
+export {
+    openModal
+};

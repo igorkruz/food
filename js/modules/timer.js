@@ -1,7 +1,6 @@
-function timer() {
+function timer(id, deadline) {
     // timer 
-    // !  deadline - встановлюємо дату дедлайну
-    let deadline = '2023-04-13';
+
     // ! за допомогою розрахунків отримуємо час який залишився до дедлайну 
     function getTimeRemaining(endtime) {
         const t = Date.parse(endtime) - Date.parse(new Date());
@@ -62,7 +61,7 @@ function timer() {
             }
         }
     }
-    setClock('.timer', deadline);
+    setClock(id, deadline);
 
 }
 
